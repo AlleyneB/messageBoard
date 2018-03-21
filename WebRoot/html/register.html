@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>注册用户</title>
+		<link rel="stylesheet" type="text/css" href="/messageBoard/css/mycss.css" />
+		<script type="text/javascript">
+			function checkConfirm() {
+				var password = document.getElementById("password").value;
+				var confirm = document.getElementById("confirm").value;
+				if(password!=confirm){
+					document.getElementById("tip").innerHTML="两次输入不同";
+				}else{
+					document.getElementById("tip").innerHTML="";
+				}
+			}
+			function beforeSubmit(){
+				var password = document.getElementById("password").value;
+				var confirm = document.getElementById("confirm").value;	
+				if(password != confirm){
+					alert("两次输入密码不同");
+				}else{
+					document.getElementById("userForm").submit();
+				}
+			}
+		</script>
+	</head>
+	<body >
+		<form id="userForm" action="/messageBoard/jsp/doRegister.jsp" method="post">
+			<table>
+				<tr>
+					<td>用&nbsp;户&nbsp;名：</td>
+					<td><input type="text" name="username" /></td>
+				</tr>
+				<tr>
+					<td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+					<td><input type="password" name="password" id="password" /></td>
+				</tr>
+				<tr>
+					<td>确认密码:</td>
+					<td><input type="password" name="confirm"  id="confirm" onkeyup="checkConfirm()"/></td>
+				</tr>
+				<tr>
+					<td id="tip" style="font-size:12px;color:red"></td>
+					<td><input type="button" value="注册" onclick="beforeSubmit()"/></td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

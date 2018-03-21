@@ -1,0 +1,20 @@
+html,body{width:100%;height:100%;}
+body{
+	background-image:url(/messageBoard/images/bg.png);
+	background-attachment:fixed;
+	background-size:100% 100%;
+	background-position: center;
+	margin:0;
+	padding:10;
+}
+#userForm{
+	position: relative;
+	left: 20%;
+	top: 35%;
+}
+#pageWindow{
+	background-size: 100% 100%;
+	margin: auto;
+	width: 70%;
+	position: center;
+}

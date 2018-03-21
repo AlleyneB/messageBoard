@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/messageBoard/css/mycss.css" />
+		<title>用户登录</title>
+	</head>
+	<body>
+		<form id="userForm" action="/messageBoard/jsp/doLogin.jsp" method="post">
+			<table>
+				<tr>
+					<td>用&nbsp;户&nbsp;名：</td>
+					<td><input type="text" name="username" /></td>
+				</tr>
+				<tr>
+					<td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+					<td><input type="password" name="password" id="password" /></td>
+				</tr>
+				<tr>
+					<td id="tip" style="font-size:12px;color:red"></td>
+					<td><input type="submit" value="登录" /></td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>
