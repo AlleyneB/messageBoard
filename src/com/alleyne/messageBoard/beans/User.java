@@ -6,10 +6,10 @@ public class User {
 	private String username;
 	private String password;
 	
-	public User(String userName, String passWord) {
+	public User(String username, String password) {
 		super();
-		this.username = userName;
-		this.password = passWord;
+		this.username = username;
+		this.password = password;
 	}
 
 	public User(Integer id) {
@@ -39,29 +39,29 @@ public class User {
 	/**
 	 * @return the userName
 	 */
-	public String getUserName() {
+	public String getUsername() {
 		return username;
 	}
 
 	/**
 	 * @param userName the userName to set
 	 */
-	public void setUserName(String userName) {
-		this.username = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
 	 * @return the passWord
 	 */
-	public String getPassWord() {
+	public String getPassword() {
 		return password;
 	}
 
 	/**
 	 * @param passWord the passWord to set
 	 */
-	public void setPassWord(String passWord) {
-		this.password = passWord;
+	public void setPassWord(String password) {
+		this.password = password;
 	}
 
 	/* (non-Javadoc)
@@ -69,7 +69,7 @@ public class User {
 	 */
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", userName=" + username + ", passWord="
+		return "User [id=" + id + ", userName=" + username + ", password="
 				+ password + "]";
 	}
 	

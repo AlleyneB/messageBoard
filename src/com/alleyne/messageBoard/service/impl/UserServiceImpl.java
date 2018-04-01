@@ -1,11 +1,15 @@
 package com.alleyne.messageBoard.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alleyne.messageBoard.beans.User;
 import com.alleyne.messageBoard.dao.IUserDao;
 import com.alleyne.messageBoard.service.IUserService;
 
+@Service("userService")
 public class UserServiceImpl  implements IUserService{
-
+	@Autowired
 	private IUserDao dao;
 	
 	/**

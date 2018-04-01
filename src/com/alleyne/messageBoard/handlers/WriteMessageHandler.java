@@ -3,40 +3,42 @@ package com.alleyne.messageBoard.handlers;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
-import org.springframework.web.HttpRequestHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alleyne.messageBoard.beans.Message;
 import com.alleyne.messageBoard.beans.User;
 import com.alleyne.messageBoard.service.IMessageService;
 
-public class WriteMessageHandler implements HttpRequestHandler{
-
+@Controller
+public class WriteMessageHandler {
+	@Autowired
+	@Qualifier("messageService")
 	private IMessageService service;
 
 	public void setService(IMessageService service) {
 		this.service = service;
 	}
-
-	public void handleRequest(HttpServletRequest request,
+	@RequestMapping("writeMessage.do")
+	public void handleRequest(String message, Integer userId,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		Message message = new Message();
-		message.setMessage((String)request.getParameter("message"));
-		int userId = Integer.parseInt(request.getParameter("userId"));
-		message.setUser(new User(userId));
-		service.addMessage(message);
-		Message newMessage = service.selectMessageById(message.getId());
+		Message msg = new Message();
+		msg.setMessage(message);
+		msg.setUser(new User(userId));
+		service.addMessage(msg);
+		Message newMessage = service.selectMessageById(msg.getId());
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.accumulate("time", newMessage.getTime());
 		jsonObject.accumulate("messageId", newMessage.getId());
-		jsonObject.accumulate("userName", newMessage.getUser().getUserName());
+		jsonObject.accumulate("userName", newMessage.getUser().getUsername());
 		jsonObject.accumulate("message", newMessage.getMessage());
 		response.getWriter().println(jsonObject);
 	}

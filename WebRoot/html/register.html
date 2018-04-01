@@ -4,6 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>注册用户</title>
 		<link rel="stylesheet" type="text/css" href="/messageBoard/css/mycss.css" />
+		<script type="text/javascript" src = "/messageBoard/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript">
 			function checkConfirm() {
 				var password = document.getElementById("password").value;
@@ -20,17 +21,38 @@
 				if(password != confirm){
 					alert("两次输入密码不同");
 				}else{
-					document.getElementById("userForm").submit();
+					if(document.getElementById("warn").value != "用户名已经存在"){
+						document.getElementById("userForm").submit();
+					}else{
+						alert("用户名已经存在");
+					}
 				}
+			}
+			function checkUsername(obj){
+				var username = obj.value;
+				$.ajax({
+					url:"/messageBoard/checkUsername.do",
+					type:"post",
+					data:{"username":username},
+					dataType:"json",
+					success:function(json){
+						if(json.isHit){
+							document.getElementById("warn").innerHTML = "用户名已经存在";
+						}else{
+							document.getElementById("warn").innerHTML = "";
+						}
+					}
+				});
 			}
 		</script>
 	</head>
 	<body >
-		<form id="userForm" action="/messageBoard/jsp/doRegister.jsp" method="post">
+		<form id="userForm" action="/messageBoard/doRegister.do" method="post">
 			<table>
 				<tr>
 					<td>用&nbsp;户&nbsp;名：</td>
-					<td><input type="text" name="username" /></td>
+					<td><input type="text" name="username"  onkeyup="checkUsername(this)"/></td>
+					<td id="warn" style="font-size:12px;color:red"></td>
 				</tr>
 				<tr>
 					<td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>

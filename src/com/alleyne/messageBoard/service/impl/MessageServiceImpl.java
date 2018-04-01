@@ -2,12 +2,17 @@ package com.alleyne.messageBoard.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alleyne.messageBoard.beans.Message;
 import com.alleyne.messageBoard.dao.IMessageDao;
 import com.alleyne.messageBoard.service.IMessageService;
 
+@Service("messageService")
 public class MessageServiceImpl implements IMessageService {
 	
+	@Autowired
 	private IMessageDao dao;
 	
 	/**
