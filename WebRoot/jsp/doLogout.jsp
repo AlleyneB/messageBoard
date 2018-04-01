@@ -1,32 +1,24 @@
-<%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
-Cookie cookie = null;
-Cookie[] cookies = null;
-cookies = request.getCookies();
-if(cookies != null){
-	for(int i=0; i<cookies.length;i++){
-		cookie = cookies[i];
-		if(cookie.getName().equals("userName")){
-			 cookie.setMaxAge(0);
-			 cookie.setPath("/messageBoard/");
-			 cookie.setDomain("localhost");
-	         response.addCookie(cookie);
-	         break;
-		}
-	}
-	response.setHeader("Refresh","1;url=/messageBoard/index.jsp");
-}
+	String path = request.getContextPath();
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+
+<%request.getSession().removeAttribute("user"); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="/messageBoard/css/mycss.css" />
-<title>退出登录</title>
-</head>
-<body>
-已注销登录
-</body>
+	<head>
+		<base href="<%=basePath%>">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="css/mycss.css" />
+		<title>退出登录</title>
+	</head>
+	<body>
+		<h2>已注销登录</h2>
+		<a href="index.jsp">主页</a>
+		<jsp:include page="loginRef.jsp"/>
+	</body>
 </html>

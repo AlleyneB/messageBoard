@@ -1,74 +1,24 @@
-<%@page import="java.net.URLDecoder"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.Map"%>
-<%@page import="java.util.List"%>
-
-<%@page import="com.alleyne.messageBoard.beans.*"%>
-<%@page import="com.alleyne.messageBoard.service.*"%>
-<%@page import="com.alleyne.messageBoard.service.impl.*"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>  
-<%@page import="org.springframework.context.ApplicationContext"%> 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%	
-
-    ServletContext sc = this.getServletContext();  
-    ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(sc);  
-    IUserService userService = (IUserService)ac.getBean("userService");
-    ICommentService commentService = (ICommentService)ac.getBean("commentService");
-    IMessageService messageService = (IMessageService)ac.getBean("messageService");
-	int messageId = Integer.parseInt(request.getParameter("messageId"));
-	
-	Message message = messageService.selectMessageById(messageId);
-	List<Comment> comments = commentService.selectCommentByMessageId(messageId);
-	
-	User loginUser = null;
-	String loginUserName = "";
-	Cookie cookie = null;
-	Cookie[] cookies = null;
-	int loginUserId = 49;
-	cookies = request.getCookies();
-	if(cookies != null){
-		for(int i=0; i<cookies.length;i++){
-			cookie = cookies[i];
-			if(cookie.getName().equals("userName")){
-				String userName = URLDecoder.decode(cookie.getValue(), "utf-8");
-				loginUserName = userName;
-				loginUser = userService.selectUserByName(loginUserName);
-				loginUserId = loginUser.getId();
-				break;
-			}
-		}
-	}
-	pageContext.setAttribute("loginUserId", loginUserId); 
-	pageContext.setAttribute("isLogin", loginUser != null); 
-	pageContext.setAttribute("messageId", messageId); 
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+		<base href="<%=basePath%>">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<link rel="stylesheet" type="text/css" href="/messageBoard/css/mycss.css" />
+		<link rel="stylesheet" type="text/css" href="css/mycss.css" />
 		<title>评论</title>
 	</head>
 	
 <body>
-	<div id="loginInf">
-	<%
-		if(loginUser != null){
-			out.println("<span>"+loginUser.getUserName()+",已登录</span>");
-			out.print("<span><a id='logOut' href='/messageBoard/jsp/doLogout.jsp'>退出</a></span>");
-		}else{
-			out.print("<span><a id='loginref' href='/messageBoard/html/login.html'>登录/</a></span>");
-			out.print("<span><a id='registref' href='/messageBoard/html/register.html'>注册</a></span>");
-		}
-	%>
-	<a href="/messageBoard">主页</a>
-	</div>
+	<a href="index.jsp">返回</a>
+	<jsp:include page="loginRef.jsp"/>
 	<hr>
 	<div id="pageWindow">
 		<div id="textArea">
@@ -77,29 +27,23 @@
 		</div>
 		<div id="commentsArea">
 			<h2>
-				<%
-				out.println(message.getTime()+"<br/>"
-							+message.getUser().getUserName()+"："+message.getMessage()+"<br/>");
-				 %>
+				${message.time }<br/>
+				${message.user.username }:${message.message }
 			</h2>
+			<hr/>
 			<p>评论列表</p>
-				<ol id="commentList" >
-					<%
-							for(Comment comment:message.getComments()){
-									String delCmtHtml = "";
-									String commentUserName = comment.getUser().getUserName();
-									if(loginUserName.equals(commentUserName) || loginUserName.equals("admin")){
-									delCmtHtml = "<a href='javascript:delCmt("+comment.getId()+")'>删除</a>";
-									}
-							out.println("<li id='cmt"+comment.getId()+"'>"+comment.getTime()+"<br/>"
-										+comment.getUser().getUserName()+"："+comment.getComment()
-										+"<br>"
-										+delCmtHtml
-										+"<hr>"
-										+"</li>");
-							}
-					 %>
-				</ol>
+			<ol id="commentList">
+				<c:forEach var="comment" items="${message.comments }">
+					<li id ="cmt${comment.id }">
+						${comment.time }<br/>
+						${comment.user.username }:${comment.comment }<br/>
+						<c:if test="${comment.user.username == sessionScope.user.username }">
+							<a href="javascript:delCmt(${comment.id })">删除</a>
+						</c:if>
+						<hr>
+					</li>
+				</c:forEach>
+			</ol> 
 		</div>
 	</div>
 	<script type="text/javascript" src = "${pageContext.request.contextPath}/js/jquery-1.9.1.min.js"></script>
@@ -107,8 +51,8 @@
 			function writeComment(){
 				var element = document.getElementById("text");
 				var comment = element.value;
-				var messageId = ${messageId};
-				var userId = ${loginUserId};
+				var messageId = ${message.id};
+				var userId = ${sessionScope.user.id};
 				$.ajax({
 					url:"${pageContext.request.contextPath}/writeComment.do",
 					type:"get",
@@ -130,7 +74,7 @@
 			}
 			
 			function checkLogBeforeWrite(){
-				var isLogin = ${isLogin};
+				var isLogin = ${sessionScope.user != null};
 				if(isLogin){
 					writeComment();
 				}else{

@@ -12,23 +12,26 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.alleyne.messageBoard.service.IMessageService;
+import com.alleyne.messageBoard.beans.User;
+import com.alleyne.messageBoard.service.IUserService;
 
 @Controller
-public class DelMessageHandler {
+public class checkUsernameController {
 	@Autowired
-	@Qualifier("messageService")
-	private IMessageService service;
-
-	public void setService(IMessageService service) {
-		this.service = service;
-	}
+	@Qualifier("userService")
+	private IUserService service;
 	
-	@RequestMapping("/delMessage.do")
-	public void handleRequest(Integer messageId ,HttpServletResponse response) 
-			throws ServletException, IOException{
+	@RequestMapping("/checkUsername.do")
+	public void handleRequest(String username, 
+			HttpServletResponse response) throws ServletException, IOException  {
+		boolean isHit = false;
+		User user = service.selectUserByName(username);
+		System.out.println(user);
+		if(user != null){
+			isHit = true;
+		}
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.accumulate("isDone", service.deleteMessageById(messageId));
+		jsonObject.accumulate("isHit", isHit);
 		response.getWriter().println(jsonObject);
 	}
 }

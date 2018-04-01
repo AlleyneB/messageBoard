@@ -14,7 +14,10 @@
         http://www.springframework.org/schema/aop 
         http://www.springframework.org/schema/aop/spring-aop.xsd">
         
-        <bean id="/writeMessage.do" class="com.alleyne.messageBoard.handlers.WriteMessageHandler"> 
+        <!-- 注解开发，配置组件扫描器。此种方式无法在配置文件里注入service，需要在处理器中以注解方式注入 -->
+        <context:component-scan base-package="com.alleyne.messageBoard.handlers"/>
+        
+<!--         <bean id="/writeMessage.do" class="com.alleyne.messageBoard.handlers.WriteMessageHandler"> 
         	<property name="service" ref="messageService"/> 
         </bean>
         
@@ -28,6 +31,6 @@
         
         <bean id="/delComment.do" class="com.alleyne.messageBoard.handlers.DelCommentHandler"> 
         	<property name="service" ref="commentService"/> 
-        </bean>
+        </bean> -->
         
 </beans>

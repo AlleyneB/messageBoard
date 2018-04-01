@@ -2,12 +2,16 @@ package com.alleyne.messageBoard.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alleyne.messageBoard.beans.Comment;
 import com.alleyne.messageBoard.dao.ICommentDao;
 import com.alleyne.messageBoard.service.ICommentService;
 
+@Service("commentService")
 public class CommentServiceImpl implements ICommentService {
-
+	@Autowired
 	private ICommentDao dao;
 	
 	/**
